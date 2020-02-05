@@ -10,4 +10,5 @@ Firstly, make sure that `conda` is available in the environment. Then, run the c
 
 ```bash
 make env
+conda activate attention-lstm-sentiment-analysis
 ```
