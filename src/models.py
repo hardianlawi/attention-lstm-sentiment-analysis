@@ -3,25 +3,21 @@ from tensorflow.keras.layers import LSTM, Dense, Embedding, Input, Layer
 from tensorflow.keras.models import Model
 
 
-def get_model(name, *args):
+def get_model(name, *args, **kwargs):
     if name == "lstm":
-        return _lstm_based_model(*args)
+        return _lstm_based_model(*args, **kwargs)
     if name == "attention":
-        return _attention_based_model(*args)
+        return _attention_based_model(*args, **kwargs)
     raise NotImplementedError
 
 
 def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100):
     inp = Input(shape=[maxlen])
     emb = Embedding(vocab_size, emb_size)
-
     x = emb(inp)
     x = LSTM(hidden_size)(x)
-    out = Dense(1, activation="sigmoid")
-
+    out = Dense(1, activation="sigmoid")(x)
     model = Model(inputs=inp, outputs=out)
-    model.summary()
-
     return model
 
 
@@ -30,16 +26,13 @@ def _attention_based_model(
 ):
     inp = Input(shape=[maxlen])
     emb = Embedding(vocab_size, emb_size)
-
     x = emb(inp)
     x, hs, cs = LSTM(hidden_size, return_sequences=True, return_state=True)(x)
     x, weights = BahdanauAttention(attention_hs)(hs, x)
     out = Dense(1, activation="sigmoid")(x)
-
     model = Model(inputs=inp, outputs=out)
-    model.summary()
-
-    return model
+    model_attention = Model(inputs=inp, outputs=weights)
+    return model, model_attention
 
 
 class BahdanauAttention(Layer):
