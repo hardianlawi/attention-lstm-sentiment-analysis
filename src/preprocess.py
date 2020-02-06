@@ -14,9 +14,9 @@ class Preprocessor(object):
         self._tokenizer.fit_on_texts(texts)
 
     def transform(self, sentences: List[str]):
-        sentences = self._tokenizer.tokenize(sentences)
-        sentences = sequence.pad_sequences(sentences, maxlen=self._maxlen)
-        return sentences
+        sequences = self._tokenizer.texts_to_sequences(sentences)
+        padded_sequences = sequence.pad_sequences(sequences, maxlen=self._maxlen)
+        return padded_sequences
 
     def to_json(self):
         self._tokenizer.to_json()
