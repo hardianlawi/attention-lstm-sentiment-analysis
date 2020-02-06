@@ -6,6 +6,9 @@ OOV_ID = 2
 INDEX_OFFSET = 2
 WORD2ID = imdb.get_word_index()
 ID2WORD = {i + INDEX_OFFSET: word for word, i in WORD2ID.items()}
+ID2WORD[PAD_ID] = "<PAD>"
+ID2WORD[START_ID] = "<START>"
+ID2WORD[OOV_ID] = "<OOV>"
 
 
 def get_data(vocab_size):
