@@ -5,5 +5,5 @@ dependencies:
     - black==19.10b0
     - flake8==3.7.9
     - mypy==0.761
-    - kaggle==1.5.6
     - tensorflow==2.1.0
+    - sanic==19.12.2
