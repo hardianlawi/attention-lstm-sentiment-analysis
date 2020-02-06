@@ -11,9 +11,9 @@ def get_model(name, *args, **kwargs):
     raise NotImplementedError
 
 
-def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100):
+def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100, mask_zero=True):
     inp = Input(shape=[maxlen])
-    emb = Embedding(vocab_size, emb_size)
+    emb = Embedding(vocab_size, emb_size, mask_zero=mask_zero)
     x = emb(inp)
     x = LSTM(hidden_size)(x)
     out = Dense(1, activation="sigmoid")(x)
@@ -22,10 +22,10 @@ def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100):
 
 
 def _attention_based_model(
-    maxlen, vocab_size, emb_size, hidden_size=100, attention_hs=16
+    maxlen, vocab_size, emb_size, hidden_size=100, attention_hs=16, mask_zero=True
 ):
     inp = Input(shape=[maxlen])
-    emb = Embedding(vocab_size, emb_size)
+    emb = Embedding(vocab_size, emb_size, mask_zero=mask_zero)
     x = emb(inp)
     x, hs, cs = LSTM(hidden_size, return_sequences=True, return_state=True)(x)
     x, weights = BahdanauAttention(attention_hs)(hs, x)
