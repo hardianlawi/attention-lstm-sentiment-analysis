@@ -10,7 +10,49 @@ Firstly, make sure that `conda` is available in the environment. Then, run the c
 
 ```bash
 make env
+
+# To turn on the environment
 conda activate attention-lstm-sentiment-analysis
+```
+
+## Train
+
+After running `make env`, to train the model, simply run the command below:
+
+```bash
+# lstm
+make train LOG_DIR=models/lstm MODEL_TYPE=lstm
+
+# attention+LSTM
+make train LOG_DIR=models/attention MODEL_TYPE=attention
+```
+
+**Note**: The parameters could be exposed in the `Makefile` or set using config file. However, as this is not meant to be production-ready codes, running `make train` will use all the default configs set.
+
+## Running the webservice
+
+The app could be built and run by running the command below:
+
+```bash
+# lstm
+make app LOG_DIR=models/lstm MODEL_TYPE=lstm
+
+# Attention
+make app LOG_DIR=models/attention MODEL_TYPE=attention
+```
+
+## Using Docker
+
+All the steps above could be run immediately as long as you have docker installed on your local. You can simply run the command below:
+
+```bash
+# LSTM
+make build_app MODEL_TYPE=lstm
+make run_app MODEL_TYPE=lstm
+
+# Attention
+make build_app MODEL_TYPE=attention
+make run_app MODEL_TYPE=attention
 ```
 
 ## Answers
