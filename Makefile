@@ -4,6 +4,8 @@
 # GLOBALS                                                                       #
 #################################################################################
 
+include versions.txt
+
 SHELL=/bin/bash
 PROJECT_NAME = attention-lstm-sentiment-analysis
 PROJECT_DIR = $(shell pwd)
@@ -61,18 +63,22 @@ else
 	$(SHELL) scripts/get_docker.sh
 endif
 
-train_lstm:
-	$(BINARIES)/python -m src.train $(LOG_DIR) lstm
+train:
+	$(BINARIES)/python -m src.train $(LOG_DIR) $(MODEL_TYPE)
 
-train_attention:
-	$(BINARIES)/python -m src.train $(LOG_DIR) attention
+app:
+	$(BINARIES)/python -m src.app $(LOG_DIR) $(MODEL_TYPE)
 
 build_app:
 ifeq (True,$(HAS_DOCKER))
-	docker
+	docker build -t sentiment-app:$(APP_VERSION) .
 else
 	@echo ">>> Please install docker"
 endif
+
+run_app:
+	docker run sentiment-app:$(APP_VERSION)
+
 
 #################################################################################
 # Self Documenting Commands                                                     #
