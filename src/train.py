@@ -20,7 +20,10 @@ def _preprocess_raw_data(X):
 @click.option("--batch_size", type=int, default=64)
 @click.option("--epochs", type=int, default=3)
 @click.option("--maxlen", type=int, default=500)
-def main(log_dir, model_type, vocab_size, emb_size, batch_size, epochs, maxlen):
+@click.option("--min_acc", type=float, default=0.85)
+def main(
+    log_dir, model_type, vocab_size, emb_size, batch_size, epochs, maxlen, min_acc
+):
     (X_train, y_train), (X_test, y_test) = get_data(vocab_size)
 
     preprocessor = Preprocessor(maxlen=maxlen, oov_token=ID2WORD[OOV_ID])
@@ -42,8 +45,8 @@ def main(log_dir, model_type, vocab_size, emb_size, batch_size, epochs, maxlen):
     )
 
     score = model.evaluate(X_test, y_test, verbose=0)
-
-    assert score > 0.85, "score doesnt meet the minimum threshold"
+    print("Test accuracy:", score[1])
+    assert score[1] > min_acc, f"score doesnt meet the minimum threshold {min_acc}"
 
     preprocessor.save(join(log_dir, "preprocessor.pkl"))
     model.save(join(log_dir, "saved_model"))
