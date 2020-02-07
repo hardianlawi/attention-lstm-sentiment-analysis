@@ -1,8 +1,8 @@
-import json
+import pickle
 from typing import List
 
 from tensorflow.keras.preprocessing import sequence
-from tensorflow.keras.preprocessing.text import Tokenizer, tokenizer_from_json
+from tensorflow.keras.preprocessing.text import Tokenizer
 
 
 class Preprocessor(object):
@@ -18,9 +18,11 @@ class Preprocessor(object):
         padded_sequences = sequence.pad_sequences(sequences, maxlen=self._maxlen)
         return padded_sequences
 
-    def to_json(self):
-        self._tokenizer.to_json()
+    def save(self, path):
+        with open(path, "wb") as handle:
+            pickle.dump(self, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def load_tokenizer(self, json_path):
-        with open(json_path, "r") as f:
-            self._tokenizer = tokenizer_from_json(json.loads(f))
+    @classmethod
+    def load(cls, path):
+        with open(path, "rb") as handle:
+            return pickle.load(handle)

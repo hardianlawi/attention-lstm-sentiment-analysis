@@ -3,10 +3,14 @@ from tensorflow.keras.layers import LSTM, Dense, Embedding, Input, Layer
 from tensorflow.keras.models import Model
 
 
-def get_model(name, *args, **kwargs):
-    if name == "lstm":
+def load_model(model_path):
+    return tf.keras.models.load_model(model_path)
+
+
+def get_model(model_type, *args, **kwargs):
+    if model_type == "lstm":
         return _lstm_based_model(*args, **kwargs)
-    if name == "attention":
+    if model_type == "attention":
         return _attention_based_model(*args, **kwargs)
     raise NotImplementedError
 

@@ -9,9 +9,34 @@ PROJECT_NAME = attention-lstm-sentiment-analysis
 PROJECT_DIR = $(shell pwd)
 CONDA_ROOT=$(shell conda info --root)
 
+ifeq (,$(shell which pyenv))
+	HAS_PYENV=False
+	CONDA_ROOT=$(shell conda info --root)
+ifeq (True,$(shell if [ ! -d ${CONDA_ROOT}/envs/${PROJECT_NAME} ]; then echo True; fi))
+	# use conda root if env is missing (when running on Docker)
+	BINARIES = ${CONDA_ROOT}/bin
+else
+	BINARIES = ${CONDA_ROOT}/envs/${PROJECT_NAME}/bin
+endif
+else
+	HAS_PYENV=True
+	CONDA_VERSION=$(shell echo $(shell pyenv version | awk '{print $$1;}') | awk -F "/" '{print $$1}')
+	BINARIES = $(HOME)/.pyenv/versions/${CONDA_VERSION}/envs/${PROJECT_NAME}/bin
+endif
+
+ifeq (,$(shell which docker))
+	HAS_DOCKER=False
+else
+	HAS_DOCKER=True
+endif
+
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
+
+check_path:
+	echo "conda path: $(CONDA_ROOT)"
+	echo "python path: $(BINARIES)"
 
 ## Set up conda environment and install dependencies
 env:
@@ -23,6 +48,31 @@ endif
 
 remove_env:
 	conda remove -n $(PROJECT_NAME) --all
+
+install_kernel:
+	$(BINARIES)/python -m ipykernel install --user --name $(PROJECT_NAME)
+
+## Install docker if missing
+install_docker:
+ifeq (True,$(HAS_DOCKER))
+	@echo ">>> Docker already installed"
+else
+	@echo ">>> Installing docker"
+	$(SHELL) scripts/get_docker.sh
+endif
+
+train_lstm:
+	$(BINARIES)/python -m src.train $(LOG_DIR) lstm
+
+train_attention:
+	$(BINARIES)/python -m src.train $(LOG_DIR) attention
+
+build_app:
+ifeq (True,$(HAS_DOCKER))
+	docker
+else
+	@echo ">>> Please install docker"
+endif
 
 #################################################################################
 # Self Documenting Commands                                                     #

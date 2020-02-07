@@ -6,4 +6,7 @@ dependencies:
     - flake8==3.7.9
     - mypy==0.761
     - tensorflow==2.1.0
+    - tensorflow_hub==0.7.0
     - sanic==19.12.2
+    - ipykernel==5.1.4
+    - nb_black==1.0.7
