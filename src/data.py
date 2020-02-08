@@ -1,3 +1,5 @@
+import numpy as np
+
 import tensorflow_datasets as tfds
 
 
@@ -9,7 +11,6 @@ def get_data():
         as_supervised=True,
     )
 
-
     def _convert2numpy(data):
         sentences = []
         labels = []
@@ -17,7 +18,6 @@ def get_data():
             sentences.append(x.decode("utf-8"))
             labels.append(int(y))
         return sentences, np.array(labels)
-
 
     str_X_train, y_train = _convert2numpy(train_data)
     str_X_val, y_val = _convert2numpy(validation_data)

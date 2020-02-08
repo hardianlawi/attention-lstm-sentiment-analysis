@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from os.path import join
 
@@ -21,6 +22,7 @@ def _save_json(path, data):
 
 
 def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per_req=3):
+    logging.info("Generating test requests.")
     processed_test_samples = preprocessor.transform(test_samples)
     probabilities = model(processed_test_samples).numpy().squeeze().tolist()
 
@@ -29,6 +31,9 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
         sentences = test_samples[x : x + num_sentences_per_req]
         probs = probabilities[x : x + num_sentences_per_req]
         test_requests.append({"sentences": sentences, "probabilities": probs})
+
+    logging.info("Sample test request:", test_requests[0])
+
     return test_requests
 
 
