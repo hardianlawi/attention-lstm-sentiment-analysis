@@ -46,7 +46,7 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
 @click.option("--vocab_size", type=int, default=5000)
 @click.option("--emb_size", type=int, default=32)
 @click.option("--batch_size", type=int, default=64)
-@click.option("--epochs", type=int, default=3)
+@click.option("--epochs", type=int, default=1)
 @click.option("--maxlen", type=int, default=500)
 @click.option("--min_acc", type=float, default=0.85)
 @click.option("--num_samples", type=int, default=180)
