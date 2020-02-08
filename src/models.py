@@ -15,7 +15,7 @@ def get_model(model_type, *args, **kwargs):
     raise NotImplementedError
 
 
-def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100, mask_zero=True):
+def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=32, mask_zero=True):
     inp = Input(shape=[maxlen])
     emb = Embedding(vocab_size, emb_size, mask_zero=mask_zero)
     x = emb(inp)
@@ -26,7 +26,7 @@ def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=100, mask_zero=T
 
 
 def _attention_based_model(
-    maxlen, vocab_size, emb_size, hidden_size=100, attention_hs=16, mask_zero=True
+    maxlen, vocab_size, emb_size, hidden_size=32, attention_hs=16, mask_zero=True
 ):
     inp = Input(shape=[maxlen])
     emb = Embedding(vocab_size, emb_size, mask_zero=mask_zero)
