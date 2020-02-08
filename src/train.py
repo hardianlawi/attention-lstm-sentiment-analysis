@@ -16,7 +16,7 @@ def _save_json(path, data):
 
 def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per_req=3):
     processed_test_samples = preprocessor.transform(test_samples)
-    probabilities = model(processed_test_samples).squeeze().tolist()
+    probabilities = model(processed_test_samples).numpy().squeeze().tolist()
 
     test_requests = []
     for x in range(0, len(test_samples), num_sentences_per_req):
@@ -35,7 +35,7 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
 @click.option("--epochs", type=int, default=3)
 @click.option("--maxlen", type=int, default=500)
 @click.option("--min_acc", type=float, default=0.85)
-@click.option("--num_samples", type=float, default=200)
+@click.option("--num_samples", type=int, default=180)
 def main(
     log_dir,
     model_type,

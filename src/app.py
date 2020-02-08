@@ -19,7 +19,6 @@ def predict(request):
     request_json = request.json
     validate_request(request_json)
     sentences = request_json["sentences"]
-
     probabilities, sentiments = generate_predictions(sentences)
 
     data["success"] = True
