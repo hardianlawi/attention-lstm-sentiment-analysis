@@ -1,8 +1,8 @@
 import argparse
+from copy import copy
 
 from sanic import Sanic, response
-
-from src.app_utils import generate_predictions, load, validate_request
+from src.app_utils import generate_predictions, load, preprocess, validate_request
 
 app = Sanic()
 
@@ -11,19 +11,27 @@ MODEL_TYPE = None
 
 @app.route("/predict", methods=["POST"])
 def predict(request):
-    data = {
-        "success": False,
-        "model_type": MODEL_TYPE,
-    }
+    data = {"model_type": MODEL_TYPE, "predictions": []}
 
     request_json = request.json
     validate_request(request_json)
-    sentences = request_json["sentences"]
-    probabilities, sentiments = generate_predictions(sentences)
 
-    data["success"] = True
-    data["probabilities"] = probabilities
-    data["sentiments"] = sentiments
+    sentences = copy(request_json["sentences"])
+    for i, sentence in enumerate(sentences):
+        try:
+            sentence = str(sentence)
+        except ValueError:
+            sentences[i] = ""
+
+    preprocessed_sentences = preprocess(sentences)
+    probabilities, sentiments = generate_predictions(preprocessed_sentences)
+
+    for sentence, prob, sent in zip(
+        request_json["sentences"], probabilities, sentiments
+    ):
+        data["predictions"].append(
+            {"sentence": sentence, "probability": prob, "sentiment": sent,}
+        )
 
     return response.json(data)
 

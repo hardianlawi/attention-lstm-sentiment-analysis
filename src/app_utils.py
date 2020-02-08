@@ -1,6 +1,8 @@
 import os
 from typing import List
 
+import numpy as np
+
 from src.models import load_model
 from src.preprocess import Preprocessor
 
@@ -22,10 +24,15 @@ def load(log_dir: str):
     assert PREPROCESSOR is not None, "Preprocessor has not been properly loaded"
 
 
-def generate_predictions(sentences: List[str]):
-    if PREPROCESSOR is None or MODEL is None:
+def preprocess(sentences: List[str]):
+    if PREPROCESSOR is None:
+        raise ValueError("Preprocessor is not properly loaded")
+    return PREPROCESSOR.transform(sentences)
+
+
+def generate_predictions(preprocessed_sentences: np.ndarray):
+    if MODEL is None:
         raise ValueError("Models are not properly loaded")
-    preprocessed_sentences = PREPROCESSOR.transform(sentences)
     probabilities = MODEL(preprocessed_sentences)
     sentiments = (probabilities > 0.5).astype(int).squeeze().tolist()
     return probabilities, sentiments
@@ -37,10 +44,3 @@ def validate_request(request_json):
     sentences = request_json["sentences"]
     if not isinstance(sentences, list):
         raise ValueError("`sentences` has to be a list")
-    for sentence in sentences:
-        try:
-            sentence = str(sentence)
-        except ValueError:
-            raise ValueError(
-                "one of the value in `sentences` could not be converted to string."
-            )
