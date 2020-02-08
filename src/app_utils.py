@@ -12,7 +12,7 @@ MODEL = None
 
 def load(log_dir: str):
     global MODEL, PREPROCESSOR
-    model_path = os.path.join(log_dir, "saved_model")
+    model_path = os.path.join(log_dir, "model.h5")
     preprocessor_path = os.path.join(log_dir, "preprocessor.pkl")
     if not os.path.exists(model_path) or not os.path.exists(preprocessor_path):
         raise Exception(

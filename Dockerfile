@@ -9,7 +9,7 @@ WORKDIR /opt/${PROJECT_NAME}
 
 ENV LOG_DIR=/opt/${PROJECT_NAME}/${LOG_DIR}
 
-RUN apt-get update -qq && apt-get install -y make cmake
+RUN apt-get update -qq && apt-get install -y make cmake vim
 
 RUN make env
 RUN make train

@@ -11,8 +11,6 @@ from src.logging import setup_logging
 from src.models import get_model
 from src.preprocess import Preprocessor
 
-setup_logging()
-
 
 def _create_dir_if_not_exist(dir):
     if not os.path.exists(dir):
@@ -100,4 +98,5 @@ def main(
 
 
 if __name__ == "__main__":
+    setup_logging()
     main()
