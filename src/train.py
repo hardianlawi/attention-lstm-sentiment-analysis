@@ -79,9 +79,9 @@ def main(
     model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     model.fit(
-        X_train[batch_size:],
-        y_train[batch_size:],
-        validation_data=(X_train[:batch_size], y_train[:batch_size]),
+        X_train,
+        y_train,
+        validation_data=(X_val, y_val),
         batch_size=batch_size,
         epochs=epochs,
     )

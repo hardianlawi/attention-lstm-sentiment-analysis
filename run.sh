@@ -1,0 +1,2 @@
+make app
+make test
