@@ -18,7 +18,7 @@ def _create_dir_if_not_exist(dir):
 
 def _save_json(path, data):
     with open(path, "w") as f:
-        json.dump(f, data)
+        json.dump(data, f)
 
 
 def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per_req=3):
