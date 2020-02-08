@@ -1,4 +1,5 @@
 import json
+import os
 from os.path import join
 
 import click
@@ -8,6 +9,10 @@ from src.data import ID2WORD, OOV_ID, get_data
 from src.models import get_model
 from src.preprocess import Preprocessor
 
+
+def _create_dir_if_not_exist(dir):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
 
 def _save_json(path, data):
     with open(path, "w") as f:
@@ -47,6 +52,8 @@ def main(
     min_acc,
     num_samples,
 ):
+    _create_dir_if_not_exist(log_dir)
+
     (X_train, y_train), (X_test, y_test) = get_data(vocab_size)
     test_samples = np.random.choice(X_test, num_samples)
 
