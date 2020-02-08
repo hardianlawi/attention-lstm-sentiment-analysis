@@ -10,3 +10,5 @@ dependencies:
     - sanic==19.12.2
     - ipykernel==5.1.4
     - nb_black==1.0.7
+    - matplotlib==3.1.3
+    - seaborn==0.10.0

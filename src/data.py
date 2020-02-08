@@ -15,6 +15,10 @@ def get_data(vocab_size):
     (X_train, y_train), (X_test, y_test) = imdb.load_data(
         num_words=vocab_size, start_char=START_ID, oov_char=OOV_ID
     )
-    str_X_train = list(map(lambda x: [ID2WORD[c] for c in x if c != 0], X_train))
-    str_X_test = list(map(lambda x: [ID2WORD[c] for c in x if c != 0], X_test))
+    str_X_train = list(
+        map(lambda x: " ".join([ID2WORD[c] for c in x if c != PAD_ID]), X_train)
+    )
+    str_X_test = list(
+        map(lambda x: " ".join([ID2WORD[c] for c in x if c != PAD_ID]), X_test)
+    )
     return (str_X_train, y_train), (str_X_test, y_test)
