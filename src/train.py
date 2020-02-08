@@ -7,8 +7,11 @@ import click
 import numpy as np
 
 from src.data import get_data
+from src.logging import setup_logging
 from src.models import get_model
 from src.preprocess import Preprocessor
+
+setup_logging()
 
 
 def _create_dir_if_not_exist(dir):

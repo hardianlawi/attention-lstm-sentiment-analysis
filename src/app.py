@@ -3,6 +3,9 @@ from copy import copy
 
 from sanic import Sanic, response
 from src.app_utils import generate_predictions, load, preprocess, validate_request
+from src.logging import setup_logging
+
+setup_logging()
 
 app = Sanic()
 
