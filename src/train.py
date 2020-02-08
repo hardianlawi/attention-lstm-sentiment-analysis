@@ -28,8 +28,8 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
 
     test_requests = []
     for x in range(0, len(test_samples), num_sentences_per_req):
-        sentences = test_samples[x : x + num_sentences_per_req]
-        probs = probabilities[x : x + num_sentences_per_req]
+        sentences = list(test_samples[x : x + num_sentences_per_req])
+        probs = list(probabilities[x : x + num_sentences_per_req])
         test_requests.append({"sentences": sentences, "probabilities": probs})
 
     logging.info("Sample test request:", test_requests[0])
