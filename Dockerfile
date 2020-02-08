@@ -4,8 +4,8 @@ ARG PROJECT_NAME
 ARG LOG_DIR
 ARG MODEL_TYPE
 
-WORKDIR ${PROJECT_NAME}
 COPY . /opt/${PROJECT_NAME}
+WORKDIR /opt/${PROJECT_NAME}
 
 RUN apt-get update -qq && apt-get install -y make cmake
 

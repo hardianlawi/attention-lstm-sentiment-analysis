@@ -27,7 +27,7 @@ def load(log_dir: str):
 def preprocess(sentences: List[str]):
     if PREPROCESSOR is None:
         raise ValueError("Preprocessor is not properly loaded")
-    return PREPROCESSOR.transform(sentences)
+    return PREPROCESSOR.transform(sentences, return_len=True, return_oov_pctg=True)
 
 
 def generate_predictions(preprocessed_sentences: np.ndarray):

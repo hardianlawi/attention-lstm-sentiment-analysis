@@ -20,11 +20,35 @@ class Preprocessor(object):
         )
         self.__oov_id = self._word2id[self.__oov_token]
 
-    def transform(self, sentences: List[str]):
+    def transform(
+        self,
+        sentences: List[str],
+        return_len: bool = False,
+        return_oov_pctg: bool = False,
+    ):
         sequences = self._tokenizer.texts_to_sequences(sentences)
         padded_sequences = sequence.pad_sequences(sequences, maxlen=self._maxlen)
         padded_sequences = self._filter_oov(padded_sequences)
-        return padded_sequences
+
+        outputs = (padded_sequences,)
+
+        if return_len:
+            outputs += (list(map(len, sequences)),)
+
+        if return_oov_pctg:
+            outputs += (
+                list(
+                    map(
+                        lambda x: len(["" for t in x if t == self.__oov_id]) / len(x),
+                        sequences,
+                    )
+                ),
+            )
+
+        if len(outputs) == 1:
+            return outputs[0]
+
+        return outputs
 
     def _filter_oov(self, X):
         X = X.copy()

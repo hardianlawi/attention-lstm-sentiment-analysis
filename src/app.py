@@ -11,7 +11,7 @@ MODEL_TYPE = None
 
 @app.route("/predict", methods=["POST"])
 def predict(request):
-    data = {"model_type": MODEL_TYPE, "predictions": []}
+    resp = {"model_type": MODEL_TYPE, "predictions": []}
 
     request_json = request.json
     validate_request(request_json)
@@ -23,16 +23,33 @@ def predict(request):
         except ValueError:
             sentences[i] = ""
 
-    preprocessed_sentences = preprocess(sentences)
-    probabilities, sentiments = generate_predictions(preprocessed_sentences)
+    preprocessed_seqs, seqs_len, seqs_oov_pctgs = preprocess(sentences)
+    probabilities, sentiments = generate_predictions(preprocessed_seqs)
 
-    for sentence, prob, sent in zip(
-        request_json["sentences"], probabilities, sentiments
+    for sentence, prob, sent, ps, seq_len, seq_oov_pctg in zip(
+        request_json["sentences"],
+        probabilities,
+        sentiments,
+        preprocessed_seqs,
+        seqs_len,
+        seqs_oov_pctgs,
     ):
-        data["predictions"].append(
-            {"sentence": sentence, "probability": prob, "sentiment": sent,}
-        )
-
+        data = {"sentence": sentence}
+        if seq_len < 2:
+            data.update(
+                {
+                    "message": "model not generating prediction due to sequence too short "
+                }
+            )
+        elif seq_oov_pctg > 0.5:
+            data.update(
+                {
+                    "message": "model not generating prediction due to high pctg of OOV tokens"
+                }
+            )
+        else:
+            data.update({"probability": prob, "sentiment": sent})
+        resp["predictions"].append(data)
     return response.json(data)
 
 
