@@ -1,3 +1,4 @@
+import os
 import pickle
 from typing import List
 
@@ -19,6 +20,7 @@ class Preprocessor(object):
         return padded_sequences
 
     def save(self, path):
+        _make_dir_if_not_exists(path)
         with open(path, "wb") as handle:
             pickle.dump(self, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -26,3 +28,9 @@ class Preprocessor(object):
     def load(cls, path):
         with open(path, "rb") as handle:
             return pickle.load(handle)
+
+
+def _make_dir_if_not_exists(path):
+    dir = os.path.dirname(path)
+    if not os.path.exists(dir):
+        os.makedirs(dir)
