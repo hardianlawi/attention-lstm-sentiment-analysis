@@ -71,7 +71,7 @@ app:
 
 build_app:
 ifeq (True,$(HAS_DOCKER))
-	docker build -t sentiment-app-$(MODEL_TYPE):$(APP_VERSION) . --build-arg PROJECT_NAME=$(PROJECT_NAME) --build-arg LOG_DIR=$(PROJECT_DIR)/model --build-arg MODEL_TYPE=$(MODEL_TYPE)
+	docker build -t sentiment-app-$(MODEL_TYPE):$(APP_VERSION) . --build-arg PROJECT_NAME=$(PROJECT_NAME) --build-arg LOG_DIR=model --build-arg MODEL_TYPE=$(MODEL_TYPE)
 else
 	@echo ">>> Please install docker"
 endif

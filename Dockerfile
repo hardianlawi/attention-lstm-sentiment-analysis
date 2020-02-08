@@ -7,6 +7,8 @@ ARG MODEL_TYPE
 COPY . /opt/${PROJECT_NAME}
 WORKDIR /opt/${PROJECT_NAME}
 
+ENV LOG_DIR=/opt/${PROJECT_NAME}/${LOG_DIR}
+
 RUN apt-get update -qq && apt-get install -y make cmake
 
 RUN make env
