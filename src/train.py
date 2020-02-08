@@ -5,7 +5,7 @@ from os.path import join
 import click
 import numpy as np
 
-from src.data import ID2WORD, OOV_ID, get_data
+from src.data import get_data
 from src.models import get_model
 from src.preprocess import Preprocessor
 
@@ -13,6 +13,7 @@ from src.preprocess import Preprocessor
 def _create_dir_if_not_exist(dir):
     if not os.path.exists(dir):
         os.makedirs(dir)
+
 
 def _save_json(path, data):
     with open(path, "w") as f:
@@ -41,6 +42,7 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
 @click.option("--maxlen", type=int, default=500)
 @click.option("--min_acc", type=float, default=0.85)
 @click.option("--num_samples", type=int, default=180)
+@click.option("--oov_token", type=str, default="<OOV>")
 def main(
     log_dir,
     model_type,
@@ -51,17 +53,21 @@ def main(
     maxlen,
     min_acc,
     num_samples,
+    oov_token,
 ):
     _create_dir_if_not_exist(log_dir)
 
-    (X_train, y_train), (X_test, y_test) = get_data(vocab_size)
-    test_samples = np.random.choice(X_test, num_samples)
+    (str_X_train, y_train), (str_X_val, y_val), (str_X_test, y_test) = get_data()
+    test_samples = np.random.choice(str_X_test, num_samples)
 
-    preprocessor = Preprocessor(maxlen=maxlen, oov_token=ID2WORD[OOV_ID])
-    preprocessor.fit_on_texts(X_train + X_test)
+    preprocessor = Preprocessor(
+        maxlen=maxlen, vocab_size=vocab_size, oov_token=oov_token
+    )
+    preprocessor.fit_on_texts(str_X_train + str_X_val + str_X_test)
 
-    X_train = preprocessor.transform(X_train)
-    X_test = preprocessor.transform(X_test)
+    X_train = preprocessor.transform(str_X_train)
+    X_val = preprocessor.transform(str_X_val)
+    X_test = preprocessor.transform(str_X_test)
 
     # Define model
     model = get_model(model_type, maxlen, vocab_size, emb_size)
