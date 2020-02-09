@@ -8,6 +8,7 @@ COPY . /opt/${PROJECT_NAME}
 WORKDIR /opt/${PROJECT_NAME}
 
 ENV LOG_DIR=/opt/${PROJECT_NAME}/${LOG_DIR}
+ENV MODEL_TYPE=${MODEL_TYPE}
 
 RUN apt-get update -qq && apt-get install -y make cmake vim
 
