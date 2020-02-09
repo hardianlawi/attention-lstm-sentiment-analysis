@@ -77,7 +77,7 @@ else
 endif
 
 run_app:
-	docker run sentiment-app-$(MODEL_TYPE):$(APP_VERSION)
+	docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)
 
 test:
 	$(BINARIES)/python -m src.test_api $(LOG_DIR)
