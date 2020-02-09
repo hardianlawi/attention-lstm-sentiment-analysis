@@ -7,7 +7,7 @@ from src.logging import setup_logging
 
 setup_logging()
 
-app = Sanic()
+app = Sanic(__name__)
 
 MODEL_TYPE = None
 
@@ -19,18 +19,12 @@ def predict(request):
     request_json = request.json
     validate_request(request_json)
 
-    sentences = copy(request_json["sentences"])
-    for i, sentence in enumerate(sentences):
-        try:
-            sentence = str(sentence)
-        except ValueError:
-            sentences[i] = ""
-
+    sentences = request_json["sentences"]
     preprocessed_seqs, seqs_len, seqs_oov_pctgs = preprocess(sentences)
     probabilities, sentiments = generate_predictions(preprocessed_seqs)
 
     for sentence, prob, sent, ps, seq_len, seq_oov_pctg in zip(
-        request_json["sentences"],
+        sentences,
         probabilities,
         sentiments,
         preprocessed_seqs,
@@ -51,9 +45,11 @@ def predict(request):
                 }
             )
         else:
-            data.update({"probability": prob, "sentiment": sent})
+            data.update({"probability": float(prob), "sentiment": int(sent)})
+
         resp["predictions"].append(data)
-    return response.json(data)
+
+    return response.json(resp)
 
 
 @app.route("/", methods=["GET"])
