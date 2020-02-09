@@ -4,6 +4,11 @@
 
 The dataset used is the famous IMDB dataset which is downloaded from [Kaggle](https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews). For the sake of convenience, the dataset is uploaded here and could be found in the `data` directory.
 
+## Using Docker
+
+
+
+
 ## Preparing Environment
 
 Firstly, make sure that `conda` is available in the environment. Then, run the command below to install the environment required to run the codes:
@@ -57,8 +62,14 @@ make run_app MODEL_TYPE=attention
 
 ## Answers
 
-2. Attention mechanism was developed based on humans' way of perceiving information (images, texts, etc) by focusing more on certain parts depending on the objective. Internally, it is learning a set of importance weights of different parts of, in this case, sentence that tells us which words of the sentence are more important when determining the sentiment of the sentence. The biggest advantage of attention over LSTM is that it helps the gradients to backpropagate to each timestep because it creates a direct connection from each timestep to the output layer as opposed to stack of multiplications in LSTM. This is particularly important when we are dealing with long timesteps/sentences due to the vanishing/exploding gradient problem.
-4. It is useful
+### What is attention mechanism? Why can it improve LSTM?
+
+> Attention mechanism was developed based on humans' way of perceiving information (images, texts, etc) by focusing more on certain parts depending on the objective. Internally, it is learning a set of importance weights of different parts of, in this case, sentence that tells us which words of the sentence are more important when determining the sentiment of the sentence. The biggest advantage of attention over LSTM is that it helps the gradients to backpropagate to each timestep because it creates a direct connection from each timestep to the output layer as opposed to stack of multiplications in LSTM. This is particularly important when we are dealing with long timesteps/sentences due to the vanishing/exploding gradient problem.
+
+### Is the attention mechanism useful in this problem?
+
+> Yes, the comparison between LSTM and LSTM+Attention can be seen in [this notebook](https://github.com/hardianlawi/attention-lstm-sentiment-analysis/blob/master/notebooks/Benchmarking.ipynb). Two sets of configs were run for both LSTM and Attention+LSTM where both LSTM are of same size, but Attention+LSTM has slightly more parameters due to the attention layer. In both cases, Attention+LSTM gives almost 1% boost in terms of accuracy with only slight increase in the number of parameters.
+
 5. - Initialize embeddings from pre-trained models trained on big corpus. This provides better prior for the model to start with. This helps the model converges faster and improves the generalizability especially the case where the words do not occur frequently in the training data.
     - Ensembling and stacking of several models could generally provide some percentage boost to the prediction power although usually with the cost of reduction in speed.
     - Bidirectional LSTM incorporates both past and future information to generate prediction. This could generally help when how you perceive your past information is influenced by your future information. The drawback of using this is you would always have to wait for the complete sentence before generating a prediction.
