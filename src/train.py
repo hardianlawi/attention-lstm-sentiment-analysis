@@ -46,7 +46,7 @@ def _generate_test_requests(model, preprocessor, test_samples, num_sentences_per
 @click.option("--batch_size", type=int, default=64)
 @click.option("--epochs", type=int, default=1)
 @click.option("--maxlen", type=int, default=500)
-@click.option("--min_acc", type=float, default=0.85)
+@click.option("--min_acc", type=float, default=0.6)
 @click.option("--num_samples", type=int, default=180)
 @click.option("--oov_token", type=str, default="<OOV>")
 def main(
