@@ -34,7 +34,7 @@ def generate_predictions(preprocessed_sentences: np.ndarray):
     if MODEL is None:
         raise ValueError("Models are not properly loaded")
     probabilities = MODEL.predict(preprocessed_sentences).squeeze(axis=1)
-    sentiments = (probabilities > 0.5).astype(int).squeeze().tolist()
+    sentiments = (probabilities > 0.5).astype(int).tolist()
     return probabilities, sentiments
 
 
