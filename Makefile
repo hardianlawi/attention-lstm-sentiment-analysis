@@ -80,7 +80,7 @@ run_app:
 	docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)
 
 test_app:
-	$(eval CONTAINER_ID = $(shell docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)))
+	$(eval CONTAINER_ID = $(shell docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION) | cut -c 1-12))
 	mkdir -p /tmp/model
 	docker cp $(CONTAINER_ID):/$(PROJECT_NAME)/model/test_requests.json /tmp/model/test_requests.json
 	$(BINARIES)/python -m src.test_api /tmp/model
