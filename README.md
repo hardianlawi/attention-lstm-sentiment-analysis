@@ -30,7 +30,7 @@ make test MODEL_TYPE=lstm
 make test MODEL_TYPE=attention
 ```
 
-*NOTE* This will need the port `8000` to be available.
+**NOTE**. This will need the port `8000` to be available.
 
 ### Running the App
 
@@ -44,7 +44,7 @@ make run MODEL_TYPE=lstm
 make run MODEL_TYPE=attention
 ```
 
-*NOTE* This will need the port `8080` to be available.
+**NOTE**. This will need the port `8080` to be available.
 
 ## Without Docker
 
