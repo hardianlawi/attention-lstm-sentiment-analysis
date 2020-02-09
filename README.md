@@ -71,7 +71,7 @@ make train LOG_DIR=models/lstm MODEL_TYPE=lstm
 make train LOG_DIR=models/attention MODEL_TYPE=attention
 ```
 
-**Note**: The parameters could be exposed in the `Makefile` or set using config file. However, as this is not meant to be production-ready codes, running `make train` will use all the default configs set.
+**Note**. The parameters could be exposed in the `Makefile` or set using config file. However, as this is not meant to be production-ready codes, running `make train` will use all the default configs set.
 
 ### Running the Webservice
 
@@ -95,7 +95,7 @@ make test_api LOG_DIR=models/lstm
 make test_api LOG_DIR=models/attention
 ```
 
-*NOTE* This will simply send the test requests generated from the `make train` step to the webservice run from `make app` step. Therefore, it is important to make sure that the test requests sent correspond to the correct model.
+**NOTE**. This will simply send the test requests generated from the `make train` step to the webservice run from `make app` step. Therefore, it is important to make sure that the test requests sent correspond to the correct model.
 
 ## Thoughts
 
