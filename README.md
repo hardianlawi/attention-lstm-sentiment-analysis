@@ -6,10 +6,49 @@ The dataset used is the famous IMDB dataset which is downloaded from [Kaggle](ht
 
 ## Using Docker
 
+### Build
 
+To run the scripts using `docker`, make sure that `docker` is available on your local. Then, simply run the command below:
 
+```bash
+# LSTM
+make build MODEL_TYPE=lstm
 
-## Preparing Environment
+# Attention
+make build MODEL_TYPE=attention
+```
+
+### API Test
+
+After building the app, the test could be run using the command below:
+
+```bash
+# LSTM
+make test MODEL_TYPE=lstm
+
+# Attention
+make test MODEL_TYPE=attention
+```
+
+*NOTE* This will need the port `8000` to be available.
+
+### Running the App
+
+This could be done without running the test. To run the app in the background, run the command below:
+
+```bash
+# LSTM
+make run MODEL_TYPE=lstm
+
+# Attention
+make run MODEL_TYPE=attention
+```
+
+*NOTE* This will need the port `8080` to be available.
+
+## Without Docker
+
+### Preparing Environment
 
 Firstly, make sure that `conda` is available in the environment. Then, run the command below to install the environment required to run the codes:
 
@@ -20,7 +59,7 @@ make env
 conda activate attention-lstm-sentiment-analysis
 ```
 
-## Train
+### Train
 
 After running `make env`, to train the model, simply run the command below:
 
@@ -34,7 +73,7 @@ make train LOG_DIR=models/attention MODEL_TYPE=attention
 
 **Note**: The parameters could be exposed in the `Makefile` or set using config file. However, as this is not meant to be production-ready codes, running `make train` will use all the default configs set.
 
-## Running the webservice
+### Running the Webservice
 
 The app could be built and run by running the command below:
 
@@ -46,19 +85,17 @@ make app LOG_DIR=models/lstm MODEL_TYPE=lstm
 make app LOG_DIR=models/attention MODEL_TYPE=attention
 ```
 
-## Using Docker
-
-All the steps above could be run immediately as long as you have docker installed on your local. You can simply run the command below:
+### Testing the Webservice
 
 ```bash
 # LSTM
-make build_app MODEL_TYPE=lstm
-make run_app MODEL_TYPE=lstm
+make test_api LOG_DIR=models/lstm
 
-# Attention
-make build_app MODEL_TYPE=attention
-make run_app MODEL_TYPE=attention
+# Attention+LSTM
+make test_api LOG_DIR=models/attention
 ```
+
+*NOTE* This will simply send the test requests generated from the `make train` step to the webservice run from `make app` step. Therefore, it is important to make sure that the test requests sent correspond to the correct model.
 
 ## Answers
 
