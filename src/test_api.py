@@ -1,9 +1,14 @@
 import json
+import logging
 from os.path import join
 
 import click
 import numpy as np
 import requests
+
+from src.logging import setup_logging
+
+setup_logging()
 
 
 def _read_json(path):
@@ -24,12 +29,20 @@ def main(log_dir):
         )
         expected_probabilities = np.array(request["probabilities"])
 
+        flag = True
         if response.status_code == 200:
-            probabilities = np.array(response.json()["probabilities"])
-            if np.all(np.isclose(expected_probabilities, probabilities)):
-                count += 1
+            predictions = response.json()["predictions"]
+            for pred, exp_prob in zip(predictions, expected_probabilities):
+                if not np.isclose(pred["probability"], exp_prob):
+                    flag = False
+                    logging.info(
+                        "Prediction is different: ", pred["probability"], exp_prob
+                    )
 
-    print("Success requests:", count / len(test_requests))
+        if flag:
+            count += 1
+
+    logging.info(f"Success requests: {(count / len(test_requests) * 100):.2f}%")
 
     assert np.isclose(
         count / len(test_requests), 1.0

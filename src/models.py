@@ -26,7 +26,13 @@ def _lstm_based_model(maxlen, vocab_size, emb_size, hidden_size=32, mask_zero=Tr
 
 
 def _attention_based_model(
-    maxlen, vocab_size, emb_size, hidden_size=32, attention_hs=16, mask_zero=True
+    maxlen,
+    vocab_size,
+    emb_size,
+    hidden_size=32,
+    attention_hs=16,
+    mask_zero=True,
+    return_attn_weights=False,
 ):
     inp = Input(shape=[maxlen])
     emb = Embedding(vocab_size, emb_size, mask_zero=mask_zero,)
@@ -35,8 +41,10 @@ def _attention_based_model(
     x, weights = BahdanauAttention(attention_hs)(hs, x)
     out = Dense(1, activation="sigmoid")(x)
     model = Model(inputs=inp, outputs=out)
-    model_attention = Model(inputs=inp, outputs=weights)
-    return model, model_attention
+    if return_attn_weights:
+        model_attention = Model(inputs=inp, outputs=weights)
+        return model, model_attention
+    return model
 
 
 class BahdanauAttention(Layer):
