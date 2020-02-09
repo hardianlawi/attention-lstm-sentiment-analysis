@@ -79,8 +79,12 @@ endif
 run_app:
 	docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)
 
-test:
+test_app:
+	$(eval CONTAINER_ID=$(docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)))
+	mkdir -p $(LOG_DIR)
+	docker cp $(CONTAINER_ID):/$(PROJECT_NAME)/$(LOG_DIR)/test_requests.json $(LOG_DIR)/test_requests.json
 	$(BINARIES)/python -m src.test_api $(LOG_DIR)
+	docker kill $(CONTAINER_ID)
 
 
 #################################################################################
