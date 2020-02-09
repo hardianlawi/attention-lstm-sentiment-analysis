@@ -72,10 +72,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("log_dir", type=str)
     parser.add_argument("model_type", type=str)
+    parser.add_argument('--port', type=int, default=8080)
 
     args = parser.parse_args()
     MODEL_TYPE = args.model_type
+    port = args.port
 
     load(args.log_dir)
 
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=port)

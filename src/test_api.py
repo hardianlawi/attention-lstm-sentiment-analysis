@@ -18,14 +18,15 @@ def _read_json(path):
 
 @click.command()
 @click.argument("log_dir", type=str)
-def main(log_dir):
+@click.option("--port", type=int, default=8080)
+def main(log_dir, port):
 
     test_requests = _read_json(join(log_dir, "test_requests.json"))
     count = 0
 
     for request in test_requests:
         response = requests.post(
-            "http://localhost:8080/predict", data=json.dumps(request)
+            f"http://localhost:{port}/predict", data=json.dumps(request)
         )
         expected_probabilities = np.array(request["probabilities"])
 
