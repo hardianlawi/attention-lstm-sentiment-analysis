@@ -10,9 +10,12 @@ PREPROCESSOR = None
 MODEL = None
 
 
-def load(log_dir: str):
+def load(log_dir: str, model_type: str):
     global MODEL, PREPROCESSOR
-    model_path = os.path.join(log_dir, "saved_model/model")
+    if model_type == "lstm":
+        model_path = os.path.join(log_dir, "model.h5")
+    else:
+        model_path = os.path.join(log_dir, "saved_model/model")
     preprocessor_path = os.path.join(log_dir, "preprocessor.pkl")
     if not os.path.exists(model_path) or not os.path.exists(preprocessor_path):
         raise Exception(

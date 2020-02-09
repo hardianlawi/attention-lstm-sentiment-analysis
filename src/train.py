@@ -94,7 +94,13 @@ def main(
     test_requests = _generate_test_requests(model, preprocessor, test_samples)
     _save_json(join(log_dir, "test_requests.json"), test_requests)
     preprocessor.save(join(log_dir, "preprocessor.pkl"))
-    model.save(join(log_dir, "saved_model/model"))
+
+    # HACK
+    # For some reason savedModel format is not working with `lstm` model
+    if model_type == "lstm":
+        model.save(join(log_dir, "model.h5"))
+    else:
+        model.save(join(log_dir, "saved_model/model"))
 
 
 if __name__ == "__main__":
