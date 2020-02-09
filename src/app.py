@@ -32,7 +32,7 @@ def predict(request):
         seqs_oov_pctgs,
     ):
         data = {"sentence": sentence}
-        if seq_len <= 2:
+        if seq_len == 0:
             data.update(
                 {
                     "message": "model not generating prediction due to sequence too short "

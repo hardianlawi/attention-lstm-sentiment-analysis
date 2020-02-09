@@ -97,7 +97,7 @@ make test_api LOG_DIR=models/attention
 
 *NOTE* This will simply send the test requests generated from the `make train` step to the webservice run from `make app` step. Therefore, it is important to make sure that the test requests sent correspond to the correct model.
 
-## Answers
+## Thoughts
 
 ### What is attention mechanism? Why can it improve LSTM?
 
@@ -105,13 +105,21 @@ make test_api LOG_DIR=models/attention
 
 ### Is the attention mechanism useful in this problem?
 
-> Yes, the comparison between LSTM and LSTM+Attention can be seen in [this notebook](https://github.com/hardianlawi/attention-lstm-sentiment-analysis/blob/master/notebooks/Benchmarking.ipynb). Two sets of configs were run for both LSTM and Attention+LSTM where both LSTM are of same size, but Attention+LSTM has slightly more parameters due to the attention layer. In both cases, Attention+LSTM gives almost 1% boost in terms of accuracy with only slight increase in the number of parameters.
+> Yes, the comparison between LSTM and LSTM+Attention can be seen in [this notebook](https://github.com/hardianlawi/attention-lstm-sentiment-analysis/blob/master/notebooks/Benchmarking.ipynb). Two sets of configs were run for both LSTM and Attention+LSTM where both LSTM are of same size, but Attention+LSTM has slightly more parameters due to the attention layer. In both cases, Attention+LSTM gives almost 1% boost in terms of accuracy with only slight increase in the number of parameters. Furthermore, some analysis on the Attention mechanism is done on [this notebook](https://github.com/hardianlawi/attention-lstm-sentiment-analysis/blob/master/notebooks/Attention%20%2B%20LSTM%20Analysis.ipynb). As can be seen, the model is working similarly to what has been explained [here](https://github.com/hardianlawi/attention-lstm-sentiment-analysis#what-is-attention-mechanism-why-can-it-improve-lstm).
 
-5. - Initialize embeddings from pre-trained models trained on big corpus. This provides better prior for the model to start with. This helps the model converges faster and improves the generalizability especially the case where the words do not occur frequently in the training data.
-    - Ensembling and stacking of several models could generally provide some percentage boost to the prediction power although usually with the cost of reduction in speed.
-    - Bidirectional LSTM incorporates both past and future information to generate prediction. This could generally help when how you perceive your past information is influenced by your future information. The drawback of using this is you would always have to wait for the complete sentence before generating a prediction.
-    - Remove LSTM altogether and use more powerful attention based algorithm e.g. BERT
-7. Empty strings (OOV tokens in the string are less than x%)
+### What other ways to improve LSTM-based sentiment analysis?
+
+> - Initialize embeddings from pre-trained models trained on big corpus. This provides better prior for the model to start with. This helps the model converges faster and improves the generalizability especially the case where the words do not occur frequently in the training data.
+> - Ensembling and stacking of several models could generally provide some percentage boost to the prediction power although usually with the cost of reduction in speed.
+> - Bidirectional LSTM incorporates both past and future information to generate prediction. This could generally help when how you perceive your past information is influenced by your future information. The drawback of using this is you would always have to wait for the complete sentence before generating a prediction.
+> - Remove LSTM altogether and use more powerful attention based algorithm e.g. BERT
+
+### What kinds of inputs validation should be done to the string input?
+
+> - Sequence length: If the sequence is too short, ideally you have to be more careful when generating prediction because it could just be too little context to tell the sentiment. In this case, if the string is empty, you could simply choose not to generate any predictions, but if the string is not empty but short, you could set some probability intervals (model is not confident in the prediction) in which the model does not generate any predictions.
+> - Out of Vocabulary (OOV) percentage: Since the algorithm used doesn't support OOV words, it is important to check the percentage of the OOV tokens because if it is too high, the model would not have enough context to generate reliable prediction.
+> - Language: This is essentially checking if the input language is the same as what was fit to the model.
+
 8. Data validation, integration tests, unit tests, performance validation check
 
 ## TODO
