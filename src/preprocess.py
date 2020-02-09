@@ -9,16 +9,21 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 class Preprocessor(object):
     def __init__(self, maxlen, vocab_size, oov_token):
         self.__oov_token = oov_token
-        self._tokenizer = Tokenizer(oov_token=oov_token)
+        self._tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_token)
         self._vocab_size = vocab_size
         self._maxlen = maxlen
 
+    @property
+    def word2id(self):
+        return self._tokenizer.word_index
+
+    @property
+    def id2word(self):
+        return self._tokenizer.index_word
+
     def fit_on_texts(self, texts):
         self._tokenizer.fit_on_texts(texts)
-        self._word2id = dict(
-            zip(self._tokenizer.index_word.values(), self._tokenizer.index_word.keys())
-        )
-        self.__oov_id = self._word2id[self.__oov_token]
+        self.__oov_id = self.word2id[self.__oov_token]
 
     def transform(
         self,
@@ -28,8 +33,6 @@ class Preprocessor(object):
     ):
         sequences = self._tokenizer.texts_to_sequences(sentences)
         padded_sequences = sequence.pad_sequences(sequences, maxlen=self._maxlen)
-        padded_sequences = self._filter_oov(padded_sequences)
-
         outputs = (padded_sequences,)
 
         if return_len:
@@ -49,11 +52,6 @@ class Preprocessor(object):
             return outputs[0]
 
         return outputs
-
-    def _filter_oov(self, X):
-        X = X.copy()
-        X[X >= self._vocab_size] = self.__oov_id
-        return X
 
     def save(self, path):
         _make_dir_if_not_exists(path)
