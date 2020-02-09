@@ -10,7 +10,7 @@ WORKDIR /${PROJECT_NAME}
 ENV LOG_DIR=/${PROJECT_NAME}/${LOG_DIR}
 ENV MODEL_TYPE=${MODEL_TYPE}
 
-RUN apt-get update -qq && apt-get install -y make cmake vim
+RUN apt-get update -qq && apt-get install -y make cmake vim curl
 
 RUN make env
 RUN make train
