@@ -8,7 +8,7 @@ import requests
 
 def _read_json(path):
     with open(path, "r") as f:
-        return json.loads(f)
+        return json.load(f)
 
 
 @click.command()
