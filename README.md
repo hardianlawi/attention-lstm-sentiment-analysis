@@ -123,3 +123,8 @@ make test_api LOG_DIR=models/attention
 ### Test cases for Model Training Pipeline
 
 > - Unit Test: this is a must although there is not any in this repository due to time constraint. Basically, this is to test that every individual function performs as expected.
+> - Data validation:
+>> - Check if our knowledge regarding the data match with those that actually pass through the pipeline e.g. length of the strings, vocabulary size, etc.
+>> - Check if the transformed data are also what we expect e.g. the length of the sequences after the tokenization or padding, etc.
+>> - Check the difference between the training and test data e.g. the number of common words, length of sequences, etc.
+> - Integration test: This is to make sure that the whole pipeline is working as expected. This could be done by fixing some static dataset and run the pipeline end-to-end, and check the artifacts generated from the pipeline, the model's performance, size, and so on.
