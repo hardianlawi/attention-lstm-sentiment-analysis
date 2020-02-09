@@ -1,4 +1,4 @@
-.PHONY: env data test
+.PHONY: env data build run test
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -69,24 +69,23 @@ train:
 app:
 	$(BINARIES)/python -m src.app $(LOG_DIR) $(MODEL_TYPE)
 
-build_app:
+build:
 ifeq (True,$(HAS_DOCKER))
 	docker build -t sentiment-app-$(MODEL_TYPE):$(APP_VERSION) . --build-arg PROJECT_NAME=$(PROJECT_NAME) --build-arg LOG_DIR=model --build-arg MODEL_TYPE=$(MODEL_TYPE)
 else
 	@echo ">>> Please install docker"
 endif
 
-run_app:
+run:
 	docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION)
 
-send_test_requests:
-	$(BINARIES)/python -m src.test_api $(LOG_DIR)
-
-test_app:
-	$(eval CONTAINER_ID = $(shell docker run -p 8080:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION) | cut -c 1-12))
+test:
+	$(eval CONTAINER_ID = $(shell docker run -p 8000:8080 --detach sentiment-app-$(MODEL_TYPE):$(APP_VERSION) | cut -c 1-12))
 	mkdir -p /tmp/model
 	docker cp $(CONTAINER_ID):/$(PROJECT_NAME)/model/test_requests.json /tmp/model/test_requests.json
-	send_test_requests LOG_DIR=/tmp/model
+	@echo "Waiting for model to be successfully initialized."
+	$(shell sleep 15)
+	$(BINARIES)/python -m src.test_api /tmp/model --port 8000
 	rm -r /tmp/model
 	docker kill $(CONTAINER_ID)
 
