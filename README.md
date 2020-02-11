@@ -114,8 +114,10 @@ make test_api LOG_DIR=models/attention
 > - Bidirectional LSTM incorporates both past and future information to generate prediction. This could generally help when how you perceive your past information is influenced by your future information. The drawback of using this is you would always have to wait for the complete sentence before generating a prediction.
 > - Remove LSTM altogether and use more powerful attention based algorithm e.g. BERT
 
-### What kinds of inputs validation should be done to the string input?
+### What kinds of preprocessing or inputs validation should be done to the string input?
 
+> - Tokens filtering: Filters unnecessary tokens like URLs, emails, numbers, symbols, punctuation and so forth.
+> - Lowercase: This is optional but to avoid training serving skew, this is recommended.
 > - Sequence length: If the sequence is too short, ideally you have to be more careful when generating prediction because it could just be too little context to tell the sentiment. In this case, if the string is empty, you could simply choose not to generate any predictions, but if the string is not empty but short, you could set some probability intervals (model is not confident in the prediction) in which the model does not generate any predictions.
 > - Out of Vocabulary (OOV) percentage: Since the algorithm used doesn't support OOV words, it is important to check the percentage of the OOV tokens because if it is too high, the model would not have enough context to generate reliable prediction.
 > - Language: This is essentially checking if the input language is the same as what was fit to the model.
