@@ -54,6 +54,7 @@ class BahdanauAttention(Layer):
         self.W2 = tf.keras.layers.Dense(units)
         self.V = tf.keras.layers.Dense(1)
 
+    # TODO: Add masking
     def call(self, query, values):
         # query : [batch_size, hidden_size]
         # values: [batch_size, maxlen, hidden_size]
